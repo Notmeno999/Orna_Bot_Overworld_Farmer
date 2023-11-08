@@ -85,9 +85,9 @@ def get_square_coords(square_size,window_coords):
     return square_coords
 
 # Function to find red pixels in the final image
-def find_red_pixels():
+def find_red_pixels(file_path="final_image.png"):
     # Open the image
-    image = Image.open("final_image.png")
+    image = Image.open(file_path)
     width, height = image.size
 
     red_pixels = []
@@ -163,8 +163,11 @@ def find_and_click_text(string, window_coords=window_coords(), threshold=0.6,):
         print("Game window not found.")
         return None, None
     
-    # Take a screenshot of the window area
+    # Take a screenshot of the window area and save it
+    screenshot_path = "screenshot_to_text.png"
     screenshot = pyautogui.screenshot(region=window_coords)
+    screenshot.save(screenshot_path)
+    print(f"Screenshot saved as: {screenshot_path}")
     screenshot = np.array(screenshot)
     
     # Convert the screenshot to grayscale
@@ -186,6 +189,7 @@ def find_and_click_text(string, window_coords=window_coords(), threshold=0.6,):
                 return x, y
     
     # If the text is not found, return None
+    print(f"'{string}' not found")
     return None, None
 
 # Function to find specific text on the game screen
@@ -195,8 +199,11 @@ def only_find_text(string, window_coords=window_coords(), threshold=0.6,):
         print("Game window not found.")
         return None, None
     
-    # Take a screenshot of the window area
+    # Take a screenshot of the window area and save it
+    screenshot_path = "screenshot_to_text.png"
     screenshot = pyautogui.screenshot(region=window_coords)
+    screenshot.save(screenshot_path)
+    print(f"Screenshot saved as: {screenshot_path}")
     screenshot = np.array(screenshot)
     
     # Convert the screenshot to grayscale
@@ -373,7 +380,6 @@ def buffer():
 
 window_coords = window_coords()
 square = get_square_coords(400,window_coords)
-red_pixels = find_red_pixels()
 
 
 buffer_bool = False  # Set this variable to True or False based on your requirement
