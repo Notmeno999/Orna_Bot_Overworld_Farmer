@@ -164,14 +164,14 @@ def find_and_click_text(string, window_coords=window_coords(), threshold=0.6,):
         return None, None
     
     # Take a screenshot of the window area and save it
-    screenshot_path = "screenshot_to_text.png"
+    screenshot_path = "screenshot.png"
     screenshot = pyautogui.screenshot(region=window_coords)
     screenshot.save(screenshot_path)
     print(f"Screenshot saved as: {screenshot_path}")
-    screenshot = np.array(screenshot)
+    screenshot1 = np.array(screenshot)
     
     # Convert the screenshot to grayscale
-    gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(screenshot1, cv2.COLOR_BGR2GRAY)
     
     # Perform OCR on the grayscale image
     data = pytesseract.image_to_data(gray, output_type=pytesseract.Output.DICT)
@@ -200,14 +200,14 @@ def only_find_text(string, window_coords=window_coords(), threshold=0.6,):
         return None, None
     
     # Take a screenshot of the window area and save it
-    screenshot_path = "screenshot_to_text.png"
+    screenshot_path = "screenshot.png"
     screenshot = pyautogui.screenshot(region=window_coords)
     screenshot.save(screenshot_path)
     print(f"Screenshot saved as: {screenshot_path}")
-    screenshot = np.array(screenshot)
+    screenshot1 = np.array(screenshot)
     
     # Convert the screenshot to grayscale
-    gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(screenshot1, cv2.COLOR_BGR2GRAY)
     
     # Perform OCR on the grayscale image
     data = pytesseract.image_to_data(gray, output_type=pytesseract.Output.DICT)
@@ -241,10 +241,13 @@ def find_and_click_image(image_path, confidence=0.6):
             # Move the mouse to the center of the image and click
             pyautogui.moveTo(center_x, center_y)
             pyautogui.click()
+            return center_x, center_y
         else:
             print(image_path,"not found on screen.")
     except Exception as e:
         print("An error occurred:", str(e))
+
+    return None, None
 
 # Function to find and click specific images on the game screen
 def find_and_hold_image(image_path, confidence=0.6, hold_duration=0.8):
@@ -437,10 +440,9 @@ try:
 #===================================================================================#
         #Click Battle
         time.sleep(0.2)
-        result_x, result_y = find_and_click_text("BATTLE")
+        result_x, result_y = find_and_click_image("battle_green.png")
         if result_x is not None and result_y is not None:
             battle_click_count += 1  # Increment battle click count
-            print("Battle Click Count:", battle_click_count)  # Print the battle click count for each click
 #===================================================================================#
         # IN_Battle Loop
         found = False
@@ -452,7 +454,7 @@ try:
                     pyautogui.click(attack_x,attack_y)
                     found = True
                 
-                result_x, result_y = find_and_click_text("CONTINUE")
+                result_x, result_y = find_and_click_image("continue_green.png")
                 
                 # Add a condition to exit the loop
                 if result_x is not None and result_y is not None:
